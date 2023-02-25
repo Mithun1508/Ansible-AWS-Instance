@@ -1,0 +1,14 @@
+Host nnode
+    HostName {{ ha_master_private_dns_name }}
+    User {{ ha_user }}
+    IdentityFile {{ ha_identity_file }}
+
+{% for item in ha_slaves_private_dns_names %}
+Host dnode{{ loop.index }}
+    HostName {{ item }}
+    User {{ ha_user }}
+    IdentityFile {{ ha_identity_file }}
+
+{% endfor %}
+Host 0.0.0.0
+    StrictHostKeyChecking no    

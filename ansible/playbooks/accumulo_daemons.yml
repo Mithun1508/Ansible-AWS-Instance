@@ -1,0 +1,36 @@
+- name: Accumulo Daemons
+  hosts: servers
+  become: true
+  become_user: "{{ ac_user }}"
+  tasks:
+    # Stop the 'tserver' (if not running, it will still return status code 0)
+    #
+    - name: "Stop the 'tserver' '{{ ac_master_host }}'"
+      delegate_to: "{{ ac_master_host }}"
+      shell:
+        cmd: "source {{ ac_bashrc }}; ./accumulo-service tserver stop"
+        chdir: "{{ ac_home }}/bin"
+
+    # Start the 'tserver'
+    #
+    - name: "Start the 'tserver' '{{ ac_master_host }}'"
+      delegate_to: "{{ ac_master_host }}"
+      shell:
+        cmd: "source {{ ac_bashrc }}; ./accumulo-service tserver start"
+        chdir: "{{ ac_home }}/bin"
+
+    # Kill the cluster (if not running, it will still return status code 0)
+    #
+    - name: "Kill the Cluster Daemons '{{ ac_master_host }}'"
+      delegate_to: "{{ ac_master_host }}"
+      shell:
+        cmd: "source {{ ac_bashrc }}; ./accumulo-cluster kill"
+        chdir: "{{ ac_home }}/bin"
+
+    # Web UI can be accessed on the master node port 9995
+    #
+    - name: "Start the Cluster Daemons '{{ ac_master_host }}'"
+      delegate_to: "{{ ac_master_host }}"
+      shell:
+        cmd: "source {{ ac_bashrc }}; ./accumulo-cluster start"
+        chdir: "{{ ac_home }}/bin"

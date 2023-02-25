@@ -1,0 +1,83 @@
+- name: Accumulo
+  hosts: servers
+  become: true
+  become_user: "{{ ac_user }}"
+  tasks:
+    - name: Ensure that HADOOP_HOME is set
+      lineinfile:
+        path: "{{ ac_conf }}/accumulo-env.sh"
+        regexp: '^export HADOOP_HOME=.*'
+        line: 'export HADOOP_HOME="${HADOOP_HOME:-{{ ha_home }}}"'
+
+    - name: Ensure that ZOOKEEPER_HOME is set, ensuring executable bit set on that file
+      lineinfile:
+        path: "{{ ac_conf }}/accumulo-env.sh"
+        regexp: '^export ZOOKEEPER_HOME=.*'
+        line: 'export ZOOKEEPER_HOME="${ZOOKEEPER_HOME:-{{ zk_home }}}"'
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0750'
+
+    - name: Template for 'accumulo.properties'
+      template:
+        src: ../templates/accumulo/accumulo.properties
+        dest: "{{ ac_conf }}/accumulo.properties"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
+
+    - name: Template for 'accumulo-client.properties'
+      template:
+        src: ../templates/accumulo/accumulo-client.properties
+        dest: "{{ ac_conf }}/accumulo-client.properties"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
+
+    - name: Template for 'bashrc'
+      template:
+        src: ../templates/accumulo/bashrc
+        dest: "/home/{{ ac_user }}/.bashrc"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
+
+    - name: Template for 'masters'
+      template:
+        src: ../templates/accumulo/masters
+        dest: "{{ ac_conf }}/masters"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
+
+    - name: Template for 'gc'
+      template:
+        src: ../templates/accumulo/gc
+        dest: "{{ ac_conf }}/gc"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
+
+    - name: Template for 'monitor'
+      template:
+        src: ../templates/accumulo/monitor
+        dest: "{{ ac_conf }}/monitor"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
+
+    - name: Template for 'tservers'
+      template:
+        src: ../templates/accumulo/tservers
+        dest: "{{ ac_conf }}/tservers"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
+
+    - name: Template for 'tracers'
+      template:
+        src: ../templates/accumulo/tracers
+        dest: "{{ ac_conf }}/tracers"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'

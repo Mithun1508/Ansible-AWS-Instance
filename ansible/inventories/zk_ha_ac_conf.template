@@ -1,0 +1,47 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# EC2 Zookeeper, Hadoop, and Accumulo Configuration
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[servers]
+localhost
+
+[servers:vars]
+
+# On the dashboard, this should be the first field (i.e., 'Instance ID') of the Description
+#
+instance_ids=[ 'i-xxxxx', 'i-xxxxx', 'i-xxxxx' ]
+
+# Fill this with the specific IPs that constitute the cluster
+#
+ext_ips=[ 'xxx.xxx.xxx.xxx', 'xxx.xxx.xxx.xxx', 'xxx.xxx.xxx.xxx' ]
+int_ips=[ 'xxx.xxx.xxx.xxx', 'xxx.xxx.xxx.xxx', 'xxx.xxx.xxx.xxx' ]
+
+# List of ports used by the Zookeeper, Hadoop, and Accumulo Cluster
+#
+ext_ports=[ '22' ]
+priv_ip_ports=[ '22', '7', '2181', '2888', '3888', '9000', '54311', '8030', '8031', '9997', '10001', '10002' ]
+pub_ip_ports=[]
+
+# For constructing aliases
+#
+ec2user=ec2-user
+home_dir=your_home_dir
+ssh_key=path_to_pem_key
+
+# You can easily obtain this by looking at existing security groups
+#`
+vpc_id=vpc-xxxxx
+vpc_subnet_id=subnet-xxxxx
+
+# Credentials (generated and download 'credentials.csv' from the EC2 dashboard)
+#
+aws_access_key=YOUR_ACCESS_KEY
+aws_secret_key=YOUR_SECRET_KEY
+
+# Not to be confused with "Availability zone"!
+#
+region=us-xxxx-x
+
+# Security Group Name
+#
+security_group=ZK-HA-AC-Restricted

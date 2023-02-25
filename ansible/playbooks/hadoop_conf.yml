@@ -1,0 +1,78 @@
+- name: Hadoop
+  hosts: servers
+  become: true
+  become_user: "{{ ha_user }}"
+  tasks:
+    - name: Template for 'core-site.xml'
+      template:
+        src: ../templates/hadoop/core-site.xml
+        dest: "{{ ha_conf }}/core-site.xml"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0644'
+
+    - name: Template for 'hdfs-site.xml'
+      template:
+        src: ../templates/hadoop/hdfs-site.xml
+        dest: "{{ ha_conf }}/hdfs-site.xml"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0644'
+
+    - name: Template for 'mapred-site.xml'
+      template:
+        src: ../templates/hadoop/mapred-site.xml
+        dest: "{{ ha_conf }}/mapred-site.xml"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0644'
+
+    - name: Template for 'yarn-site.xml'
+      template:
+        src: ../templates/hadoop/yarn-site.xml
+        dest: "{{ ha_conf }}/yarn-site.xml"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0644'
+
+    - name: "Template for 'masters', file added only to '{{ ha_master_host }}'"
+      delegate_to: "{{ ha_master_host }}"
+      template:
+        src: ../templates/hadoop/masters
+        dest: "{{ ha_conf }}/masters"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0644'
+
+    - name: Template for 'slaves'
+      template:
+        src: ../templates/hadoop/slaves
+        dest: "{{ ha_conf }}/slaves"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0644'
+
+    - name: Template for the SSH 'config' file
+      delegate_to: "{{ ha_master_host }}"
+      template:
+        src: ../templates/hadoop/ssh_config
+        dest: "{{ ha_ssh_dir }}/config"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0600'
+
+    - name: Template for the SSH 'authorized_keys' file
+      template:
+        src: ../templates/hadoop/authorized_keys
+        dest: "{{ ha_ssh_dir }}/authorized_keys"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0600'
+
+    - name: Template for 'bashrc'
+      template:
+        src: ../templates/hadoop/bashrc
+        dest: "{{ ha_bashrc }}"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0644'
